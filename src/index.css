@@ -1,22 +1,156 @@
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
-  padding: 0;
-  background: black;
+  background: #000000;
   color: white;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Inter, sans-serif;
+  overflow-x: hidden;
 }
+
+/* SCROLLBAR */
 
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #09090b;
+  background: black;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #7e22ce;
-  border-radius: 10px;
+  border-radius: 20px;
+}
+
+/* BACKGROUND EFFECT */
+
+body::before {
+  content: "";
+
+  position: fixed;
+
+  width: 700px;
+  height: 700px;
+
+  background: radial-gradient(
+    circle,
+    rgba(168,85,247,0.22),
+    transparent 70%
+  );
+
+  top: -200px;
+  right: -200px;
+
+  z-index: -1;
+
+  animation: pulseGlow 6s ease-in-out infinite;
+}
+
+body::after {
+  content: "";
+
+  position: fixed;
+
+  width: 600px;
+  height: 600px;
+
+  background: radial-gradient(
+    circle,
+    rgba(168,85,247,0.12),
+    transparent 70%
+  );
+
+  bottom: -250px;
+  left: -250px;
+
+  z-index: -1;
+
+  animation: pulseGlow 8s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+}
+
+/* GLASS EFFECT */
+
+.glass {
+  background: rgba(255,255,255,0.04);
+
+  backdrop-filter: blur(16px);
+
+  border: 1px solid rgba(168,85,247,0.2);
+}
+
+/* TEXT GLOW */
+
+.text-glow {
+  text-shadow:
+    0 0 10px rgba(168,85,247,0.8),
+    0 0 30px rgba(168,85,247,0.4);
+}
+
+body {
+  background: #000000;
+  overflow-x: hidden;
+}
+
+/* PREMIUM GLASS */
+
+.glass {
+
+  background: rgba(255,255,255,0.04);
+
+  backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(168,85,247,0.15);
+
+  box-shadow:
+    0 0 40px rgba(168,85,247,0.08),
+    inset 0 0 20px rgba(255,255,255,0.03);
+
+}
+
+/* TEXT GLOW */
+
+.text-glow {
+
+  text-shadow:
+    0 0 20px rgba(168,85,247,0.9),
+    0 0 50px rgba(168,85,247,0.4);
+
+}
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: black;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7e22ce;
+  border-radius: 999px;
 }
