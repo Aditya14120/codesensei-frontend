@@ -11,6 +11,13 @@ import AnimatedBackground from "../components/effects/AnimatedBackground";
 import ParticleField from "../components/effects/ParticleField";
 import AILoader from "../components/effects/AILoader";
 import SystemStatus from "../components/effects/SystemStatus";
+import FeatureCards from "../components/home/FeatureCards";
+import StatsSection from "../components/home/StatsSection";
+import ImprovementsCard from "../components/analysis/ImprovementsCard";
+import ImprovedCodeViewer from "../components/analysis/ImprovedCodeViewer";
+import SummaryCard from "../components/analysis/SummaryCard";
+import IssuesCard from "../components/analysis/IssuesCard";
+
 function Home() {
 
   const [code, setCode] = useState(`public class Demo {
@@ -175,28 +182,33 @@ function Home() {
           </div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="
-              text-[7rem]
-              leading-none
-              font-black
-              mb-10
-            "
-          >
+  initial={{ opacity: 0, y: 50 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1 }}
+  className="
+    text-[7rem]
+    leading-none
+    font-black
+    tracking-tight
+    mb-8
+  "
+>
 
-            <span className="text-white">
-              Analyze
-            </span>
+  <span className="text-white">
+    Code
+  </span>
 
-            <br />
+  <span className="text-gray-300">
+    Intelligence
+  </span>
 
-            <span className="text-purple-500 text-glow">
-              Like A Senior Engineer
-            </span>
+  <br />
 
-          </motion.h1>
+  <span className="text-purple-500 text-glow">
+    Powered By AI
+  </span>
+
+</motion.h1>
 
           <motion.p
             initial={{ opacity: 0 }}
@@ -219,6 +231,8 @@ function Home() {
           </motion.p>
 
         </motion.div>
+        <FeatureCards />
+        <StatsSection />
 
         {/* EDITOR */}
 
@@ -284,7 +298,7 @@ function Home() {
                 from-transparent
                 via-white/20
                 to-transparent
-                -translate-x-[200%]
+                translate-x-[200%]
                 group-hover:translate-x-[200%]
                 transition-transform
                 duration-1000
@@ -308,15 +322,37 @@ function Home() {
 
             <ScoreCard score={result.score} />
 
-            <AnalysisCard
-              title="AI Explanation"
-              content={result.aiExplanation}
-            />
+           {result && (
 
-            <AnalysisCard
-              title="Improved Code"
-              content={result.improvedCode}
-            />
+  <div className="mt-24 space-y-8">
+
+    <ScoreCard score={result.score} />
+
+    <div className="grid lg:grid-cols-2 gap-8">
+
+      <SummaryCard
+        summary={result.summary}
+      />
+
+      <ImprovementsCard
+        improvements={result.improvements}
+      />
+
+    </div>
+
+    <IssuesCard
+      pmd={result.pmdResults}
+      checkstyle={result.checkstyleResults}
+      spotbugs={result.spotBugsResults}
+    />
+
+    <ImprovedCodeViewer
+      code={result.improvedCode}
+    />
+
+  </div>
+
+)}
 
           </motion.div>
 
