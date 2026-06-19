@@ -166,20 +166,41 @@ function Home() {
             "
           >
 
-            <div className="w-3 h-3 rounded-full bg-purple-500 animate-pulse" />
+            <div
+  className="
+    glass
+    inline-flex
+    items-center
+    gap-3
+    px-5
+    py-3
+    rounded-full
+    mb-8
+  "
+>
 
-            <span
-              className="
-                text-purple-300
-                uppercase
-                tracking-[0.25em]
-                text-sm
-              "
-            >
-              Wakandan AI Intelligence System
-            </span>
+  <div
+    className="
+      w-2
+      h-2
+      rounded-full
+      bg-purple-500
+      animate-pulse
+    "
+  />
 
-          </div>
+  <span
+    className="
+      text-xs
+      uppercase
+      tracking-[0.3em]
+      text-gray-300
+    "
+  >
+     Intelligence Engine
+  </span>
+
+</div>
 
           <motion.h1
   initial={{ opacity: 0, y: 50 }}
