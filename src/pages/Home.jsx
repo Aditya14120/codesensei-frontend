@@ -1,25 +1,19 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
 
 import API from "../services/api";
 
-import CodeEditor from "../components/editor/CodeEditor";
-import ScoreCard from "../components/analysis/ScoreCard";
-import AnalysisCard from "../components/analysis/AnalysisCard";
-import AnimatedBackground from "../components/effects/AnimatedBackground";
-import ParticleField from "../components/effects/ParticleField";
-import AILoader from "../components/effects/AILoader";
-import SystemStatus from "../components/effects/SystemStatus";
-import FeatureCards from "../components/home/FeatureCards";
+import Navbar from "../components/layout/Navbar";
+import SubtleGrid from "../components/effects/BackgroundEffects";
+import HeroSection from "../components/home/HeroSection";
 import StatsSection from "../components/home/StatsSection";
-import ImprovementsCard from "../components/analysis/ImprovementsCard";
-import ImprovedCodeViewer from "../components/analysis/ImprovedCodeViewer";
-import SummaryCard from "../components/analysis/SummaryCard";
-import IssuesCard from "../components/analysis/IssuesCard";
+import FeatureCards from "../components/home/FeatureCards";
+import CodeEditor from "../components/editor/CodeEditor";
+import AnalysisDashboard from "../components/analysis/AnalysisDashboard";
+import AnalysisLoader from "../components/effects/AnalysisLoader";
 
 function Home() {
-
   const [code, setCode] = useState(`public class Demo {
 
     public static void main(String[] args) {
@@ -31,360 +25,165 @@ function Home() {
 }`);
 
   const [loading, setLoading] = useState(false);
-
   const [result, setResult] = useState(null);
+  const resultsRef = useRef(null);
 
   const analyzeCode = async () => {
-
-    try {
-
-      setLoading(true);
-
-      const response = await API.post("/code/analyze", {
-        code: code
-      });
-
-      setResult(response.data);
-
-      toast.success("Analysis Complete");
-
-    } catch (error) {
-
-      console.error(error);
-
-      toast.error("Analysis Failed");
-
-    } finally {
-
-      setLoading(false);
-
+    if (!code || code.trim().length === 0) {
+      toast.error("Please enter some code first.");
+      return;
     }
 
+    try {
+      setLoading(true);
+      setResult(null);
+
+      const response = await API.post("/code/analyze", { code });
+
+      setResult(response.data);
+      toast.success("Analysis complete");
+
+      // Scroll to results after a short delay
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 300);
+    } catch (error) {
+      console.error("Analysis failed:", error);
+
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Analysis failed. Please try again.";
+
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
+    <div
+      className="min-h-screen relative"
+      style={{
+        background: "var(--bg-primary)",
+        color: "var(--text-primary)",
+      }}
+    >
+      {/* Background */}
+      <SubtleGrid />
 
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+      {/* Toast Notifications */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: "#111118",
+            color: "#e5e5e5",
+            border: "1px solid rgba(99,102,241,0.15)",
+            fontSize: "13px",
+            borderRadius: "12px",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.4), 0 0 20px rgba(99,102,241,0.05)",
+          },
+        }}
+      />
 
-      <AnimatedBackground />
-      <ParticleField />
-      
+      {/* Loader */}
+      <AnimatePresence>
+        {loading && <AnalysisLoader />}
+      </AnimatePresence>
 
+      {/* Navigation */}
+      <Navbar />
 
-      <Toaster />
-      {loading && <AILoader />}
+      {/* Content */}
+      <main className="relative z-10">
 
-      {/* NAVBAR */}
-
-      <nav
-        className="
-          w-full
-          fixed
-          top-0
-          left-0
-          z-50
-          backdrop-blur-xl
-          border-b
-          border-purple-500/10
-          bg-black/30
-        "
-      >
-
-        <div
-          className="
-            max-w-7xl
-            mx-auto
-            px-8
-            py-5
-            flex
-            items-center
-            justify-between
-          "
-        >
-
-          <div
-            className="
-              text-3xl
-              font-black
-              tracking-tight
-            "
-          >
-
-            <span className="text-white">
-              Code
-            </span>
-
-            <span className="text-purple-500 text-glow">
-              Sensei
-            </span>
-
-          </div>
-
-          <div className="hidden md:flex gap-10 text-gray-400">
-
-            <span className="hover:text-purple-400 transition-all cursor-pointer">
-              Features
-            </span>
-
-            <span className="hover:text-purple-400 transition-all cursor-pointer">
-              AI Engine
-            </span>
-
-            <span className="hover:text-purple-400 transition-all cursor-pointer">
-              Dashboard
-            </span>
-
-          </div>
-
-        </div>
-
-      </nav>
-
-      {/* MAIN */}
-
-      <div className="relative z-10 max-w-7xl mx-auto px-8 pt-40 pb-24">
-
-        {/* HERO */}
-
-        <motion.div
-          initial={{ opacity: 0, y: 80 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="mb-24"
-        >
-
-          <div
-            className="
-              inline-flex
-              items-center
-              gap-3
-              px-6
-              py-3
-              rounded-full
-              glass
-              mb-10
-            "
-          >
-
-            <div
-  className="
-    glass
-    inline-flex
-    items-center
-    gap-3
-    px-5
-    py-3
-    rounded-full
-    mb-8
-  "
->
-
-  <div
-    className="
-      w-2
-      h-2
-      rounded-full
-      bg-purple-500
-      animate-pulse
-    "
-  />
-
-  <span
-    className="
-      text-xs
-      uppercase
-      tracking-[0.3em]
-      text-gray-300
-    "
-  >
-     Intelligence Engine
-  </span>
-
-</div>
-
-          <motion.h1
-  initial={{ opacity: 0, y: 50 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 1 }}
-  className="
-    text-[7rem]
-    leading-none
-    font-black
-    tracking-tight
-    mb-8
-  "
->
-
-  <span className="text-white">
-    Code
-  </span>
-
-  <span className="text-gray-300">
-    Intelligence
-  </span>
-
-  <br />
-
-  <span className="text-purple-500 text-glow">
-    Powered By AI
-  </span>
-
-</motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="
-              text-gray-400
-              text-2xl
-              leading-[2.2rem]
-              max-w-4xl
-            "
-          >
-
-            AI-powered futuristic code review platform inspired by
-            Black Panther kinetic energy systems.
-            Detect bad practices, optimize architecture,
-            improve scalability, and generate production-level
-            code improvements instantly.
-
-          </motion.p>
-
-        </motion.div>
-        <FeatureCards />
+        <HeroSection />
         <StatsSection />
+        <FeatureCards />
 
-        {/* EDITOR */}
+        {/* Editor */}
+        <CodeEditor code={code} setCode={setCode} />
 
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-
-          <CodeEditor
-            code={code}
-            setCode={setCode}
-          />
-
-        </motion.div>
-
-        {/* BUTTON */}
-
-        <div className="flex justify-center mt-12">
-
+        {/* Analyze Button */}
+        <div className="flex justify-center py-12 px-6">
           <motion.button
-
-            whileHover={{
-              scale: 1.04,
-            }}
-
-            whileTap={{
-              scale: 0.96,
-            }}
-
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             onClick={analyzeCode}
-
             disabled={loading}
-
             className="
-              relative
-              overflow-hidden
-              group
-              px-14
-              py-5
+              relative overflow-hidden group
               rounded-2xl
-              font-bold
-              text-xl
-              bg-purple-600
-              transition-all
-              duration-300
-              hover:shadow-[0_0_80px_rgba(168,85,247,0.9)]
-              shadow-[0_0_40px_rgba(168,85,247,0.4)]
+              font-semibold
+              transition-all duration-300
+              disabled:opacity-50 disabled:cursor-not-allowed
             "
+            style={{
+              padding: "18px 56px",
+              fontSize: "16px",
+              minWidth: "260px",
+              background: loading
+                ? "rgba(255,255,255,0.04)"
+                : "rgba(255, 255, 255, 0.06)",
+              color: loading ? "var(--text-tertiary)" : "#f0f0f5",
+              border: loading ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(255,255,255,0.25)",
+              boxShadow: loading
+                ? "none"
+                : "0 0 20px rgba(255,255,255,0.04), 0 4px 20px rgba(0,0,0,0.4)",
+            }}
           >
-
-            <span className="relative z-10">
-
-              {loading ? "Analyzing..." : "Analyze Code"}
-
+            {/* Hover glow overlay */}
+            {!loading && (
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: "linear-gradient(135deg, rgba(255,255,255,0.1), transparent, rgba(255,255,255,0.05))",
+                }}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-2.5">
+              {loading ? (
+                <>
+                  <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" opacity="0.3" />
+                    <path d="M12 2a10 10 0 0 1 10 10" />
+                  </svg>
+                  Analyzing...
+                </>
+              ) : (
+                <>
+                  Analyze Code
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-200 group-hover:translate-x-0.5">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </>
+              )}
             </span>
-
-            <div
-              className="
-                absolute
-                inset-0
-                bg-gradient-to-r
-                from-transparent
-                via-white/20
-                to-transparent
-                translate-x-[200%]
-                group-hover:translate-x-[200%]
-                transition-transform
-                duration-1000
-              "
-            />
-
           </motion.button>
-
         </div>
-        <SystemStatus />
 
-        {/* RESULTS */}
-
-        {result && (
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mt-28 space-y-10"
-          >
-
-            <ScoreCard score={result.score} />
-
-           {result && (
-
-  <div className="mt-24 space-y-8">
-
-    <ScoreCard score={result.score} />
-
-    <div className="grid lg:grid-cols-2 gap-8">
-
-      <SummaryCard
-        summary={result.summary}
-      />
-
-      <ImprovementsCard
-        improvements={result.improvements}
-      />
-
+        {/* Results */}
+        <div ref={resultsRef}>
+          <AnimatePresence>
+            {result && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <AnalysisDashboard result={result} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </main>
     </div>
-
-    <IssuesCard
-      pmd={result.pmdResults}
-      checkstyle={result.checkstyleResults}
-      spotbugs={result.spotBugsResults}
-    />
-
-    <ImprovedCodeViewer
-      code={result.improvedCode}
-    />
-
-  </div>
-
-)}
-
-          </motion.div>
-
-        )}
-
-      </div>
-
-    </div>
-
   );
-
 }
 
 export default Home;

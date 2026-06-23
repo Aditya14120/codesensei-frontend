@@ -1,88 +1,299 @@
+/* ============================================
+   CODESENSEI DESIGN SYSTEM
+   Theme: Symbiote — Black Suit
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ---- RESET ---- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---- ROOT TOKENS ---- */
+
+:root {
+  /* Core backgrounds — jet black */
+  --bg-primary: #050507;
+  --bg-secondary: #0a0a0d;
+  --bg-card: rgba(255, 255, 255, 0.028);
+  --bg-card-hover: rgba(255, 255, 255, 0.05);
+  --bg-elevated: rgba(255, 255, 255, 0.035);
+
+  /* Accent colors — silver white (the spider symbol) + crimson (the eyes) */
+  --accent: #c0c0c8;
+  --accent-light: #d8d8e0;
+  --accent-lighter: #f0f0f5;
+  --accent-violet: #8b0000;
+  --accent-pink: #6b0000;
+  --accent-emerald: #34d399;
+  --accent-amber: #b0b0b8;
+  --accent-cyan: #e0e0e8;
+
+  /* Glows — subtle silver and crimson */
+  --accent-glow: rgba(200, 200, 210, 0.07);
+  --accent-glow-strong: rgba(200, 200, 210, 0.15);
+  --violet-glow: rgba(120, 0, 0, 0.1);
+
+  /* Gradients — silver/white like the symbiote web pattern */
+  --gradient-accent: linear-gradient(135deg, #a0a0a8, #d0d0d8, #ffffff);
+  --gradient-accent-wide: linear-gradient(135deg, #808088, #c0c0c8, #f0f0f5);
+  --gradient-text: linear-gradient(135deg, #c8c8d0, #e8e8f0, #ffffff, #e8e8f0);
+  --gradient-hero: linear-gradient(135deg, #ffffff, #e8e8f0, #d0d0d8, #b8b8c0);
+  --gradient-border: linear-gradient(135deg, rgba(180,180,190,0.3), rgba(220,220,230,0.3), rgba(255,255,255,0.2));
+  --gradient-border-subtle: linear-gradient(135deg, rgba(180,180,190,0.12), rgba(220,220,230,0.12), rgba(255,255,255,0.08));
+
+  /* Borders — barely visible, like shadow web lines */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.11);
+  --border-accent: rgba(200, 200, 210, 0.22);
+
+  /* Text — white and silver */
+  --text-primary: #f2f2f5;
+  --text-secondary: #888890;
+  --text-tertiary: #545458;
+  --text-accent: #c8c8d0;
+  --text-highlight: #e0e0e8;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+
+  /* Shadows — deep and dark like the symbiote */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 40px rgba(200, 200, 210, 0.04);
+  --shadow-accent: 0 0 30px rgba(200, 200, 210, 0.08), 0 0 60px rgba(100, 0, 0, 0.04);
+  --shadow-accent-strong: 0 4px 30px rgba(200, 200, 210, 0.14), 0 0 80px rgba(100, 0, 0, 0.06);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- BODY ---- */
+
 body {
   margin: 0;
   padding: 0;
-
-  background: #050505;
-  color: white;
-
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
   overflow-x: hidden;
-
-  font-family:
-    Inter,
-    system-ui,
-    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-/* Symbiote Glass */
+/* ---- GLASS CARDS ---- */
 
 .glass {
-
-  background: rgba(255,255,255,0.03);
-
+  background: var(--bg-card);
   backdrop-filter: blur(24px);
-
-  border: 1px solid rgba(255,255,255,0.06);
-
-  box-shadow:
-    0 10px 40px rgba(0,0,0,0.5);
-
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-subtle);
 }
 
-/* Purple Energy */
-
-.energy-glow {
-
-  box-shadow:
-    0 0 30px rgba(168,85,247,0.25),
-    0 0 80px rgba(168,85,247,0.1);
-
+.glass-hover {
+  transition: background var(--transition-base),
+              border-color var(--transition-base),
+              box-shadow var(--transition-base),
+              transform var(--transition-base);
 }
 
-/* Text Glow */
+.glass-hover:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+/* ---- GRADIENT TEXT ---- */
+
+.text-gradient {
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-accent {
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-subtle {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---- GLOW EFFECTS ---- */
+
+.accent-glow {
+  box-shadow: var(--shadow-accent);
+}
+
+.accent-glow-strong {
+  box-shadow: var(--shadow-accent-strong);
+}
 
 .text-glow {
-
-  text-shadow:
-    0 0 15px rgba(168,85,247,0.5);
-
+  text-shadow: 0 0 30px rgba(99, 102, 241, 0.2), 0 0 60px rgba(139, 92, 246, 0.1);
 }
 
-/* Silver Border */
-
-.silver-border {
-
-  border: 1px solid rgba(255,255,255,0.08);
-
+.border-glow {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.06);
 }
 
-/* Hover Lift */
+/* ---- GRADIENT BORDERS ---- */
 
-.hover-card {
-
-  transition:
-    transform 0.35s ease,
-    box-shadow 0.35s ease;
+.gradient-border {
+  position: relative;
 }
 
-.hover-card:hover {
-
-  transform: translateY(-6px);
-
-  box-shadow:
-    0 0 30px rgba(168,85,247,0.15);
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--gradient-border-subtle);
+  border-radius: inherit;
 }
 
-/* Scrollbar */
+/* ---- SCROLLBAR ---- */
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: var(--bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #444;
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ---- SELECTION ---- */
+
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: var(--text-primary);
+}
+
+/* ---- FOCUS RING ---- */
+
+:focus-visible {
+  outline: 1px solid rgba(99, 102, 241, 0.5);
+  outline-offset: 2px;
+}
+
+/* ---- KEYFRAMES ---- */
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes float-reverse {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-25px, 25px) scale(0.95); }
+  66% { transform: translate(20px, -15px) scale(1.05); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; filter: blur(60px); }
+  50% { opacity: 0.7; filter: blur(80px); }
+}
+
+@keyframes badge-shimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(99, 102, 241, 0.06) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 6s ease infinite;
+}
+
+.animate-float {
+  animation: float 20s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 25s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 4s ease-in-out infinite;
 }
