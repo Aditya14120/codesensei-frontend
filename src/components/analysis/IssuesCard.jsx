@@ -94,7 +94,7 @@ function IssuesCard({ pmd, checkstyle, spotbugs, bugs, codeSmells, performanceIs
                     className="text-sm py-1.5 px-3 rounded-lg"
                     style={{
                       color: "var(--text-secondary)",
-                      background: "rgba(255, 255, 255, 0.02)",
+                      background: "rgba(255, 255, 255, 0.045)",
                       borderLeft: `2px solid ${section.color}`,
                     }}
                   >

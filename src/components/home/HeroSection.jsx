@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-function HeroSection() {
+function HeroSection({ onGetStarted }) {
   return (
     <section className="relative overflow-hidden" style={{ paddingTop: "160px", paddingBottom: "80px" }}>
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 40px" }}>
@@ -90,9 +90,9 @@ function HeroSection() {
             marginBottom: "40px",
           }}
         >
-          CodeSensei analyzes your Java code with Gemini AI and static analysis
-          engines. Get instant quality scores, bug detection, performance insights,
-          and production-ready improved code — in seconds.
+          CodeSensei analyzes your Java, Python, C, and C++ code with Groq AI and
+          static analysis engines. Get instant quality scores, bug detection,
+          performance insights, and production-ready improved code — in seconds.
         </motion.p>
 
         {/* CTA Row */}
@@ -103,8 +103,8 @@ function HeroSection() {
           style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px" }}
         >
           {/* Primary CTA */}
-          <a
-            href="#editor"
+          <button
+            onClick={onGetStarted}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -135,7 +135,7 @@ function HeroSection() {
               <line x1="5" y1="12" x2="19" y2="12" />
               <polyline points="12 5 19 12 12 19" />
             </svg>
-          </a>
+          </button>
 
           {/* Secondary CTA */}
           <a

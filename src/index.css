@@ -5,15 +5,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-/* ---- RESET ---- */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* Reset is handled by Tailwind's Preflight (@layer base) in global.css.
+   Keeping an un-layered reset here would silently override every Tailwind
+   spacing utility (margin/padding/gap/space-y/mx-auto), since un-layered
+   CSS always wins over @layer rules regardless of specificity. */
 
 /* ---- ROOT TOKENS ---- */
 
@@ -21,8 +16,8 @@
   /* Core backgrounds — jet black */
   --bg-primary: #050507;
   --bg-secondary: #0a0a0d;
-  --bg-card: rgba(255, 255, 255, 0.028);
-  --bg-card-hover: rgba(255, 255, 255, 0.05);
+  --bg-card: rgba(255, 255, 255, 0.055);
+  --bg-card-hover: rgba(255, 255, 255, 0.08);
   --bg-elevated: rgba(255, 255, 255, 0.035);
 
   /* Accent colors — silver white (the spider symbol) + crimson (the eyes) */
@@ -49,8 +44,8 @@
   --gradient-border-subtle: linear-gradient(135deg, rgba(180,180,190,0.12), rgba(220,220,230,0.12), rgba(255,255,255,0.08));
 
   /* Borders — barely visible, like shadow web lines */
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-hover: rgba(255, 255, 255, 0.11);
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --border-hover: rgba(255, 255, 255, 0.18);
   --border-accent: rgba(200, 200, 210, 0.22);
 
   /* Text — white and silver */
@@ -105,6 +100,7 @@ body {
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-sm);
 }
 
 .glass-hover {

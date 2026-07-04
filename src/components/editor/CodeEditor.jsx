@@ -1,7 +1,16 @@
 import Editor from "@monaco-editor/react";
 import { motion } from "framer-motion";
 
-function CodeEditor({ code, setCode }) {
+export const LANGUAGES = [
+  { id: "java", label: "Java", fileName: "Main.java", color: "#f89820" },
+  { id: "python", label: "Python", fileName: "main.py", color: "#3776ab" },
+  { id: "c", label: "C", fileName: "main.c", color: "#5c6bc0" },
+  { id: "cpp", label: "C++", fileName: "main.cpp", color: "#00599c" },
+];
+
+function CodeEditor({ code, setCode, language, setLanguage }) {
+  const activeLanguage = LANGUAGES.find((l) => l.id === language) || LANGUAGES[0];
+
   return (
     <section id="editor" style={{ padding: "60px 0" }}>
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 40px" }}>
@@ -24,7 +33,7 @@ function CodeEditor({ code, setCode }) {
             Paste your code
           </h2>
           <p style={{ fontSize: "15px", color: "var(--text-secondary)", lineHeight: 1.6 }}>
-            Drop your Java code below and let AI analyze it.
+            Drop your code below, pick a language, and let AI analyze it.
           </p>
         </motion.div>
 
@@ -91,35 +100,50 @@ function CodeEditor({ code, setCode }) {
                   <polyline points="14 2 14 8 20 8" />
                 </svg>
                 <span style={{ fontSize: "12px", fontWeight: 500, color: "var(--accent-lighter)" }}>
-                  Main.java
+                  {activeLanguage.fileName}
                 </span>
               </div>
             </div>
 
-            {/* Language Badge */}
+            {/* Language Selector */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
-                padding: "4px 12px",
+                padding: "4px 10px",
                 borderRadius: "8px",
-                fontSize: "12px",
-                fontWeight: 500,
                 background: "rgba(255, 255, 255, 0.04)",
                 border: "1px solid rgba(255, 255, 255, 0.06)",
-                color: "var(--text-tertiary)",
               }}
             >
-              <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#f89820" }} />
-              Java
+              <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: activeLanguage.color }} />
+              <select
+                value={activeLanguage.id}
+                onChange={(e) => setLanguage(e.target.value)}
+                style={{
+                  fontSize: "12px",
+                  fontWeight: 500,
+                  color: "var(--text-tertiary)",
+                  background: "transparent",
+                  border: "none",
+                  outline: "none",
+                  cursor: "pointer",
+                }}
+              >
+                {LANGUAGES.map((lang) => (
+                  <option key={lang.id} value={lang.id} style={{ background: "#111118", color: "#e5e5e5" }}>
+                    {lang.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
           {/* Monaco Editor */}
           <Editor
             height="380px"
-            defaultLanguage="java"
+            language={activeLanguage.id}
             theme="vs-dark"
             value={code}
             onChange={(value) => setCode(value || "")}

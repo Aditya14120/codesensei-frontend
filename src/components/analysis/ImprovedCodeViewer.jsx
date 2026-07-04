@@ -1,7 +1,7 @@
 import Editor from "@monaco-editor/react";
 import { motion } from "framer-motion";
 
-function ImprovedCodeViewer({ code }) {
+function ImprovedCodeViewer({ code, language }) {
   if (!code) return null;
 
   return (
@@ -45,7 +45,7 @@ function ImprovedCodeViewer({ code }) {
       {/* Editor */}
       <Editor
         height="420px"
-        defaultLanguage="java"
+        language={language || "java"}
         theme="vs-dark"
         value={code}
         options={{

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 const features = [
   {
     title: "AI Code Review",
-    description: "Gemini-powered analysis that thinks like a senior engineer. Get deep insights into architecture, patterns, and best practices.",
+    description: "Groq-powered analysis that thinks like a senior engineer. Get deep insights into architecture, patterns, and best practices.",
     color: "#6366f1",
     bgColor: "rgba(99, 102, 241, 0.08)",
     borderColor: "rgba(99, 102, 241, 0.15)",
@@ -83,7 +83,7 @@ function FeatureCards() {
             Built for serious engineering
           </h2>
           <p style={{ fontSize: "15px", color: "var(--text-secondary)", lineHeight: 1.6 }}>
-            Everything you need to ship high-quality Java code.
+            Everything you need to ship high-quality code, in Java, Python, C, or C++.
           </p>
         </motion.div>
 

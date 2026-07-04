@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-function Navbar() {
+function Navbar({ user, onLoginClick, onLogout, links = [] }) {
   return (
     <motion.nav
       initial={{ opacity: 0, y: -20 }}
@@ -50,32 +50,76 @@ function Navbar() {
         </div>
 
         {/* Nav Links */}
-        <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-          {["Features", "Editor", "Analysis"].map((item) => (
-            <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
+        {links.length > 0 && (
+          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            {links.map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: "8px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  color: "var(--text-tertiary)",
+                  textDecoration: "none",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.color = "var(--text-primary)";
+                  e.target.style.background = "rgba(255, 255, 255, 0.04)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = "var(--text-tertiary)";
+                  e.target.style.background = "transparent";
+                }}
+              >
+                {item}
+              </a>
+            ))}
+          </div>
+        )}
+
+        {/* Auth */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          {user ? (
+            <>
+              <span style={{ fontSize: "13px", color: "var(--text-secondary)" }}>
+                Hi, {user.name || user.email}
+              </span>
+              <button
+                onClick={onLogout}
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  color: "var(--text-tertiary)",
+                  background: "transparent",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  cursor: "pointer",
+                }}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={onLoginClick}
               style={{
-                padding: "8px 16px",
+                padding: "8px 18px",
                 borderRadius: "8px",
-                fontSize: "14px",
-                fontWeight: 500,
-                color: "var(--text-tertiary)",
-                textDecoration: "none",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.color = "var(--text-primary)";
-                e.target.style.background = "rgba(255, 255, 255, 0.04)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.color = "var(--text-tertiary)";
-                e.target.style.background = "transparent";
+                fontSize: "13px",
+                fontWeight: 600,
+                color: "#0a0a0d",
+                background: "#f0f0f5",
+                border: "none",
+                cursor: "pointer",
               }}
             >
-              {item}
-            </a>
-          ))}
+              Log In
+            </button>
+          )}
         </div>
 
       </div>

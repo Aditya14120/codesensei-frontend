@@ -35,7 +35,7 @@ function AnalysisDashboard({ result }) {
         </motion.div>
 
         {/* Dashboard Grid */}
-        <div className="space-y-6">
+        <div className="space-y-8">
 
           {/* Row 1: Score + Summary */}
           <div className="grid lg:grid-cols-3 gap-6">
@@ -60,7 +60,7 @@ function AnalysisDashboard({ result }) {
           />
 
           {/* Row 3: Improved Code */}
-          <ImprovedCodeViewer code={result.improvedCode} />
+          <ImprovedCodeViewer code={result.improvedCode} language={result.language} />
 
           {/* Row 4: Learning Tips */}
           <LearningTipsCard tips={result.learningTips} />

@@ -1,20 +1,17 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import API from "../services/api";
 
 import Navbar from "../components/layout/Navbar";
 import SubtleGrid from "../components/effects/BackgroundEffects";
-import HeroSection from "../components/home/HeroSection";
-import StatsSection from "../components/home/StatsSection";
-import FeatureCards from "../components/home/FeatureCards";
 import CodeEditor from "../components/editor/CodeEditor";
 import AnalysisDashboard from "../components/analysis/AnalysisDashboard";
 import AnalysisLoader from "../components/effects/AnalysisLoader";
 
-function Home() {
-  const [code, setCode] = useState(`public class Demo {
+const DEFAULT_SNIPPETS = {
+  java: `public class Demo {
 
     public static void main(String[] args) {
 
@@ -22,11 +19,39 @@ function Home() {
 
     }
 
-}`);
+}`,
+  python: `def main():
+    print("Hello CodeSensei")
+
+
+if __name__ == "__main__":
+    main()`,
+  c: `#include <stdio.h>
+
+int main(void) {
+    printf("Hello CodeSensei\\n");
+    return 0;
+}`,
+  cpp: `#include <iostream>
+
+int main() {
+    std::cout << "Hello CodeSensei" << std::endl;
+    return 0;
+}`,
+};
+
+function Dashboard({ user, onLogout }) {
+  const [language, setLanguage] = useState("java");
+  const [code, setCode] = useState(DEFAULT_SNIPPETS.java);
 
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const resultsRef = useRef(null);
+
+  const handleLanguageChange = (nextLanguage) => {
+    setLanguage(nextLanguage);
+    setCode(DEFAULT_SNIPPETS[nextLanguage] || "");
+  };
 
   const analyzeCode = async () => {
     if (!code || code.trim().length === 0) {
@@ -38,7 +63,7 @@ function Home() {
       setLoading(true);
       setResult(null);
 
-      const response = await API.post("/code/analyze", { code });
+      const response = await API.post("/code/analyze", { code, language });
 
       setResult(response.data);
       toast.success("Analysis complete");
@@ -75,38 +100,38 @@ function Home() {
       {/* Background */}
       <SubtleGrid />
 
-      {/* Toast Notifications */}
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          style: {
-            background: "#111118",
-            color: "#e5e5e5",
-            border: "1px solid rgba(99,102,241,0.15)",
-            fontSize: "13px",
-            borderRadius: "12px",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.4), 0 0 20px rgba(99,102,241,0.05)",
-          },
-        }}
-      />
-
       {/* Loader */}
       <AnimatePresence>
         {loading && <AnalysisLoader />}
       </AnimatePresence>
 
       {/* Navigation */}
-      <Navbar />
+      <Navbar
+        user={user}
+        onLogout={onLogout}
+        links={["Editor", "Analysis"]}
+      />
 
       {/* Content */}
-      <main className="relative z-10">
+      <main className="relative z-10" style={{ paddingTop: "120px" }}>
 
-        <HeroSection />
-        <StatsSection />
-        <FeatureCards />
+        {/* Dashboard header */}
+        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 40px" }}>
+          <h1 style={{ fontSize: "26px", fontWeight: 700, letterSpacing: "-0.02em", color: "var(--text-primary)", marginBottom: "6px" }}>
+            Welcome back{user?.name ? `, ${user.name}` : ""}
+          </h1>
+          <p style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
+            Paste your code, pick a language, and get an instant AI-powered review.
+          </p>
+        </div>
 
         {/* Editor */}
-        <CodeEditor code={code} setCode={setCode} />
+        <CodeEditor
+          code={code}
+          setCode={setCode}
+          language={language}
+          setLanguage={handleLanguageChange}
+        />
 
         {/* Analyze Button */}
         <div className="flex justify-center py-12 px-6">
@@ -186,4 +211,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Dashboard;
