@@ -1,8 +1,34 @@
-import Editor from "@monaco-editor/react";
+import Editor, { DiffEditor } from "@monaco-editor/react";
 import { motion } from "framer-motion";
 
-function ImprovedCodeViewer({ code, language }) {
+const sharedOptions = {
+  readOnly: true,
+  fontSize: 14,
+  fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace",
+  fontLigatures: true,
+  lineHeight: 22,
+  minimap: { enabled: false },
+  scrollBeyondLastLine: false,
+  automaticLayout: true,
+  renderLineHighlight: "none",
+  padding: { top: 16, bottom: 16 },
+  scrollbar: {
+    verticalScrollbarSize: 6,
+    horizontalScrollbarSize: 6,
+  },
+  overviewRulerLanes: 0,
+  hideCursorInOverviewRuler: true,
+  overviewRulerBorder: false,
+};
+
+const diffEditorOptions = { ...sharedOptions, renderSideBySide: true };
+
+function ImprovedCodeViewer({ originalCode, code, language }) {
   if (!code) return null;
+
+  // Older persisted reports (saved before originalCode was tracked) won't have a left side —
+  // fall back to a read-only single editor rather than diffing against nothing.
+  const hasOriginal = Boolean(originalCode);
 
   return (
     <motion.div
@@ -27,7 +53,7 @@ function ImprovedCodeViewer({ code, language }) {
             className="text-sm font-semibold"
             style={{ color: "var(--text-primary)" }}
           >
-            Improved Code
+            {hasOriginal ? "Improved Code (Diff)" : "Improved Code"}
           </h3>
         </div>
 
@@ -43,31 +69,24 @@ function ImprovedCodeViewer({ code, language }) {
       </div>
 
       {/* Editor */}
-      <Editor
-        height="420px"
-        language={language || "java"}
-        theme="vs-dark"
-        value={code}
-        options={{
-          readOnly: true,
-          fontSize: 14,
-          fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace",
-          fontLigatures: true,
-          lineHeight: 22,
-          minimap: { enabled: false },
-          scrollBeyondLastLine: false,
-          automaticLayout: true,
-          renderLineHighlight: "none",
-          padding: { top: 16, bottom: 16 },
-          scrollbar: {
-            verticalScrollbarSize: 6,
-            horizontalScrollbarSize: 6,
-          },
-          overviewRulerLanes: 0,
-          hideCursorInOverviewRuler: true,
-          overviewRulerBorder: false,
-        }}
-      />
+      {hasOriginal ? (
+        <DiffEditor
+          height="420px"
+          language={language || "java"}
+          theme="vs-dark"
+          original={originalCode}
+          modified={code}
+          options={diffEditorOptions}
+        />
+      ) : (
+        <Editor
+          height="420px"
+          language={language || "java"}
+          theme="vs-dark"
+          value={code}
+          options={sharedOptions}
+        />
+      )}
     </motion.div>
   );
 }

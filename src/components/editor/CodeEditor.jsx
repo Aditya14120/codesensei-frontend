@@ -29,7 +29,7 @@ function CodeEditor({ code, setCode, language, setLanguage }) {
               Editor
             </span>
           </div>
-          <h2 style={{ fontSize: "28px", fontWeight: 700, letterSpacing: "-0.02em", color: "var(--text-primary)", marginBottom: "8px" }}>
+          <h2 style={{ fontFamily: "var(--font-display)", fontSize: "28px", fontWeight: 700, letterSpacing: "-0.02em", color: "var(--text-primary)", marginBottom: "8px" }}>
             Paste your code
           </h2>
           <p style={{ fontSize: "15px", color: "var(--text-secondary)", lineHeight: 1.6 }}>
@@ -77,15 +77,20 @@ function CodeEditor({ code, setCode, language, setLanguage }) {
               borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
             }}
           >
-            {/* Traffic Lights + File name */}
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#ff5f57" }} />
-              <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#febc2e" }} />
-              <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#28c840" }} />
+            {/* Language dot + file name */}
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <span
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  background: activeLanguage.color,
+                  boxShadow: `0 0 8px ${activeLanguage.color}80`,
+                }}
+              />
 
               <div
                 style={{
-                  marginLeft: "12px",
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",

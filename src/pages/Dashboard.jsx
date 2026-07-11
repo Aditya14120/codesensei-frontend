@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 
 import API from "../services/api";
+import { detectLanguage } from "../utils/detectLanguage";
 
 import Navbar from "../components/layout/Navbar";
 import SubtleGrid from "../components/effects/BackgroundEffects";
-import CodeEditor from "../components/editor/CodeEditor";
+import CodeEditor, { LANGUAGES } from "../components/editor/CodeEditor";
 import AnalysisDashboard from "../components/analysis/AnalysisDashboard";
 import AnalysisLoader from "../components/effects/AnalysisLoader";
 
@@ -51,6 +52,20 @@ function Dashboard({ user, onLogout }) {
   const handleLanguageChange = (nextLanguage) => {
     setLanguage(nextLanguage);
     setCode(DEFAULT_SNIPPETS[nextLanguage] || "");
+  };
+
+  // Runs on every edit (not just paste) — cheap regex checks, and only acts
+  // when detection is confident and disagrees with the current dropdown, so
+  // it corrects a wrong manual pick without fighting the user mid-edit.
+  const handleCodeChange = (nextCode) => {
+    setCode(nextCode);
+
+    const detected = detectLanguage(nextCode);
+    if (detected && detected !== language) {
+      setLanguage(detected);
+      const label = LANGUAGES.find((l) => l.id === detected)?.label || detected;
+      toast(`Detected ${label} — switched the language.`, { icon: "🔍" });
+    }
   };
 
   const analyzeCode = async () => {
@@ -109,7 +124,10 @@ function Dashboard({ user, onLogout }) {
       <Navbar
         user={user}
         onLogout={onLogout}
-        links={["Editor", "Analysis"]}
+        routeLinks={[
+          { label: "Editor", to: "/dashboard" },
+          { label: "History", to: "/history" },
+        ]}
       />
 
       {/* Content */}
@@ -117,7 +135,7 @@ function Dashboard({ user, onLogout }) {
 
         {/* Dashboard header */}
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 40px" }}>
-          <h1 style={{ fontSize: "26px", fontWeight: 700, letterSpacing: "-0.02em", color: "var(--text-primary)", marginBottom: "6px" }}>
+          <h1 style={{ fontFamily: "var(--font-display)", fontSize: "26px", fontWeight: 700, letterSpacing: "-0.02em", color: "var(--text-primary)", marginBottom: "6px" }}>
             Welcome back{user?.name ? `, ${user.name}` : ""}
           </h1>
           <p style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
@@ -128,7 +146,7 @@ function Dashboard({ user, onLogout }) {
         {/* Editor */}
         <CodeEditor
           code={code}
-          setCode={setCode}
+          setCode={handleCodeChange}
           language={language}
           setLanguage={handleLanguageChange}
         />

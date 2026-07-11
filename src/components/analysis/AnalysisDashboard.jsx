@@ -22,7 +22,7 @@ function AnalysisDashboard({ result }) {
         >
           <h2
             className="text-2xl font-bold tracking-tight mb-2"
-            style={{ color: "var(--text-primary)" }}
+            style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}
           >
             Analysis Results
           </h2>
@@ -60,7 +60,11 @@ function AnalysisDashboard({ result }) {
           />
 
           {/* Row 3: Improved Code */}
-          <ImprovedCodeViewer code={result.improvedCode} language={result.language} />
+          <ImprovedCodeViewer
+            originalCode={result.originalCode}
+            code={result.improvedCode}
+            language={result.language}
+          />
 
           {/* Row 4: Learning Tips */}
           <LearningTipsCard tips={result.learningTips} />

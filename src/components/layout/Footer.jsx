@@ -59,7 +59,7 @@ function Footer() {
             className="text-xs"
             style={{ color: "var(--text-tertiary)" }}
           >
-            AI-powered code intelligence. Built with Gemini.
+            Static analysis + Groq Llama 3.3, in one review.
           </p>
         </div>
       </div>

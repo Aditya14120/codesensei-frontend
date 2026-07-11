@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 
-function Navbar({ user, onLoginClick, onLogout, links = [] }) {
+function Navbar({ user, onLoginClick, onLogout, links = [], routeLinks = [] }) {
+  const location = useLocation();
+
   return (
     <motion.nav
       initial={{ opacity: 0, y: -20 }}
@@ -49,7 +52,7 @@ function Navbar({ user, onLoginClick, onLogout, links = [] }) {
           </span>
         </div>
 
-        {/* Nav Links */}
+        {/* Nav Links (anchor-based, e.g. landing page section scrolling) */}
         {links.length > 0 && (
           <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
             {links.map((item) => (
@@ -77,6 +80,41 @@ function Navbar({ user, onLoginClick, onLogout, links = [] }) {
                 {item}
               </a>
             ))}
+          </div>
+        )}
+
+        {/* Route links (real pages, e.g. Editor / History) */}
+        {routeLinks.length > 0 && (
+          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            {routeLinks.map((item) => {
+              const active = location.pathname === item.to;
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  style={{
+                    padding: "8px 16px",
+                    borderRadius: "8px",
+                    fontSize: "14px",
+                    fontWeight: 500,
+                    color: active ? "var(--text-primary)" : "var(--text-tertiary)",
+                    background: active ? "rgba(255, 255, 255, 0.06)" : "transparent",
+                    textDecoration: "none",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.color = "var(--text-primary)";
+                    e.target.style.background = "rgba(255, 255, 255, 0.06)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.color = active ? "var(--text-primary)" : "var(--text-tertiary)";
+                    e.target.style.background = active ? "rgba(255, 255, 255, 0.06)" : "transparent";
+                  }}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </div>
         )}
 

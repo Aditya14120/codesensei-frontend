@@ -3,7 +3,7 @@
    Theme: Symbiote — Black Suit
    ============================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 /* Reset is handled by Tailwind's Preflight (@layer base) in global.css.
    Keeping an un-layered reset here would silently override every Tailwind
@@ -55,8 +55,11 @@
   --text-accent: #c8c8d0;
   --text-highlight: #e0e0e8;
 
-  /* Typography */
+  /* Typography — Inter for body copy; Space Grotesk reserved for headline
+     "impact" moments (H1/H2) so they don't read as the same generic
+     Inter-everywhere AI-template look. */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', var(--font-sans);
 
   /* Radii */
   --radius-sm: 8px;
@@ -115,6 +118,35 @@ body {
   border-color: var(--border-hover);
   box-shadow: var(--shadow-glow);
   transform: translateY(-2px);
+}
+
+/* ---- SURFACES ----
+   .glass is reserved for genuinely floating/overlay elements (auth card,
+   the hero product preview). Everything else gets one of these two flatter
+   treatments, so different regions of the app read as different materials
+   instead of the same blurred-glass recipe copy-pasted everywhere. */
+
+.surface {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-sm);
+}
+
+.surface-hover {
+  transition: background var(--transition-base),
+              border-color var(--transition-base),
+              transform var(--transition-base);
+}
+
+.surface-hover:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+.panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
 }
 
 /* ---- GRADIENT TEXT ---- */

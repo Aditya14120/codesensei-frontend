@@ -3,12 +3,14 @@ import { motion } from "framer-motion";
 const features = [
   {
     title: "AI Code Review",
-    description: "Groq-powered analysis that thinks like a senior engineer. Get deep insights into architecture, patterns, and best practices.",
+    description:
+      "Groq's Llama 3.3 reads your code the way a senior engineer would — flagging architecture and pattern issues static tools miss entirely, not just syntax.",
     color: "#6366f1",
     bgColor: "rgba(99, 102, 241, 0.08)",
     borderColor: "rgba(99, 102, 241, 0.15)",
+    featured: true,
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 22" />
         <path d="M12 2a4 4 0 0 0-4 4c0 1.95 1.4 3.58 3.25 3.93" />
         <path d="M16 16c0-2.21-1.79-4-4-4s-4 1.79-4 4" />
@@ -17,7 +19,7 @@ const features = [
   },
   {
     title: "Bug Detection",
-    description: "Identify potential bugs, null pointer risks, and logic errors before they reach production. Static + AI analysis combined.",
+    description: "Null pointer risks and logic errors, caught before they reach production.",
     color: "#8b5cf6",
     bgColor: "rgba(139, 92, 246, 0.08)",
     borderColor: "rgba(139, 92, 246, 0.15)",
@@ -35,7 +37,7 @@ const features = [
   },
   {
     title: "Performance Audit",
-    description: "Detect inefficient algorithms, unnecessary allocations, and complexity bottlenecks. Get actionable optimization advice.",
+    description: "Inefficient loops and allocation patterns, with concrete fixes.",
     color: "#f59e0b",
     bgColor: "rgba(245, 158, 11, 0.08)",
     borderColor: "rgba(245, 158, 11, 0.15)",
@@ -46,8 +48,8 @@ const features = [
     ),
   },
   {
-    title: "Code Improvement",
-    description: "Receive fully rewritten, production-ready code with applied best practices, improved naming, and cleaner architecture.",
+    title: "Rewritten Code",
+    description: "A production-ready rewrite, diffed side by side against your original.",
     color: "#34d399",
     bgColor: "rgba(52, 211, 153, 0.08)",
     borderColor: "rgba(52, 211, 153, 0.15)",
@@ -61,6 +63,8 @@ const features = [
 ];
 
 function FeatureCards() {
+  const [banner, ...rest] = features;
+
   return (
     <section id="features" style={{ padding: "60px 0" }}>
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 40px" }}>
@@ -71,7 +75,7 @@ function FeatureCards() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          style={{ marginBottom: "40px" }}
+          style={{ marginBottom: "32px" }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "14px" }}>
             <div style={{ height: "2px", width: "32px", borderRadius: "999px", background: "var(--gradient-accent)" }} />
@@ -79,7 +83,7 @@ function FeatureCards() {
               Features
             </span>
           </div>
-          <h2 style={{ fontSize: "28px", fontWeight: 700, letterSpacing: "-0.02em", color: "var(--text-primary)", marginBottom: "8px" }}>
+          <h2 style={{ fontFamily: "var(--font-display)", fontSize: "28px", fontWeight: 700, letterSpacing: "-0.02em", color: "var(--text-primary)", marginBottom: "8px" }}>
             Built for serious engineering
           </h2>
           <p style={{ fontSize: "15px", color: "var(--text-secondary)", lineHeight: 1.6 }}>
@@ -87,38 +91,73 @@ function FeatureCards() {
           </p>
         </motion.div>
 
-        {/* Cards Grid */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "16px",
-        }}>
-          {features.map((feature, index) => (
+        {/* Featured banner */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.97 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="surface surface-hover"
+          style={{
+            borderRadius: "18px",
+            padding: "28px 32px",
+            marginBottom: "16px",
+            display: "flex",
+            alignItems: "center",
+            gap: "24px",
+          }}
+        >
+          <div
+            style={{
+              width: "56px",
+              height: "56px",
+              borderRadius: "14px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              background: banner.bgColor,
+              border: `1px solid ${banner.borderColor}`,
+              color: banner.color,
+            }}
+          >
+            {banner.icon}
+          </div>
+          <div>
+            <h3 style={{ fontSize: "17px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "6px" }}>
+              {banner.title}
+            </h3>
+            <p style={{ fontSize: "14px", lineHeight: 1.6, color: "var(--text-tertiary)", maxWidth: "560px" }}>
+              {banner.description}
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Supporting cards */}
+        <div className="grid md:grid-cols-3" style={{ gap: "16px" }}>
+          {rest.map((feature, index) => (
             <motion.div
               key={feature.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.08 }}
-              className="glass glass-hover"
+              transition={{ duration: 0.4, delay: 0.1 + index * 0.08 }}
+              className="surface surface-hover"
               style={{
                 borderRadius: "16px",
-                padding: "28px 24px",
+                padding: "24px",
                 position: "relative",
-                overflow: "hidden",
-                cursor: "default",
               }}
             >
-              {/* Icon */}
               <div
                 style={{
-                  width: "44px",
-                  height: "44px",
+                  width: "40px",
+                  height: "40px",
                   borderRadius: "10px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  marginBottom: "18px",
+                  marginBottom: "16px",
                   background: feature.bgColor,
                   border: `1px solid ${feature.borderColor}`,
                   color: feature.color,
@@ -126,14 +165,10 @@ function FeatureCards() {
               >
                 {feature.icon}
               </div>
-
-              {/* Title */}
-              <h3 style={{ fontSize: "15px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "10px" }}>
+              <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px" }}>
                 {feature.title}
               </h3>
-
-              {/* Description */}
-              <p style={{ fontSize: "13px", lineHeight: 1.65, color: "var(--text-tertiary)" }}>
+              <p style={{ fontSize: "13px", lineHeight: 1.6, color: "var(--text-tertiary)" }}>
                 {feature.description}
               </p>
             </motion.div>
