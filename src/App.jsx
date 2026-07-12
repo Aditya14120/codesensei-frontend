@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
+import API from "./services/api";
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
 import HistoryPage from "./pages/HistoryPage";
 import ReportDetailPage from "./pages/ReportDetailPage";
+import TranslatePage from "./pages/TranslatePage";
+import SkillRadarPage from "./pages/SkillRadarPage";
+import PassportPage from "./pages/PassportPage";
+import VerifyPassportPage from "./pages/VerifyPassportPage";
 import AuthPage from "./pages/AuthPage";
 import RequireAuth from "./components/auth/RequireAuth";
 
@@ -50,6 +55,22 @@ function AppRoutes({ user, onAuthSuccess, onLogout }) {
         }
       />
       <Route
+        path="/translate"
+        element={
+          <RequireAuth user={user}>
+            <TranslatePage user={user} onLogout={onLogout} />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/skills"
+        element={
+          <RequireAuth user={user}>
+            <SkillRadarPage user={user} onLogout={onLogout} />
+          </RequireAuth>
+        }
+      />
+      <Route
         path="/history"
         element={
           <RequireAuth user={user}>
@@ -65,6 +86,17 @@ function AppRoutes({ user, onAuthSuccess, onLogout }) {
           </RequireAuth>
         }
       />
+      <Route
+        path="/passport/:id"
+        element={
+          <RequireAuth user={user}>
+            <PassportPage user={user} onLogout={onLogout} />
+          </RequireAuth>
+        }
+      />
+
+      {/* Public — shared passport links must work for anyone, no login required */}
+      <Route path="/verify/:id" element={<VerifyPassportPage />} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
@@ -90,10 +122,18 @@ function App() {
     setUser(data);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem(SESSION_KEY);
-    setUser(null);
-    toast.success("Logged out.");
+  const handleLogout = async () => {
+    try {
+      // Revokes every token issued to this user server-side — best-effort, since the local
+      // session should still clear even if this call fails (e.g. already offline/expired).
+      await API.post("/auth/logout");
+    } catch {
+      // ignored — see above
+    } finally {
+      localStorage.removeItem(SESSION_KEY);
+      setUser(null);
+      toast.success("Logged out.");
+    }
   };
 
   // Raised by the axios response interceptor (services/api.js) when the API

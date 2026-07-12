@@ -82,6 +82,8 @@ function HistoryPage({ user, onLogout }) {
         onLogout={onLogout}
         routeLinks={[
           { label: "Editor", to: "/dashboard" },
+          { label: "Translate", to: "/translate" },
+          { label: "Skills", to: "/skills" },
           { label: "History", to: "/history" },
         ]}
       />

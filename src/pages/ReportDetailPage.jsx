@@ -50,23 +50,45 @@ function ReportDetailPage({ user, onLogout }) {
         onLogout={onLogout}
         routeLinks={[
           { label: "Editor", to: "/dashboard" },
+          { label: "Translate", to: "/translate" },
+          { label: "Skills", to: "/skills" },
           { label: "History", to: "/history" },
         ]}
       />
 
       <main className="relative z-10" style={{ paddingTop: "120px", paddingBottom: "60px" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 40px" }}>
-          <Link
-            to="/history"
-            style={{ fontSize: "13px", color: "var(--text-tertiary)", textDecoration: "none" }}
-          >
-            ← Back to history
-          </Link>
-          {createdAt && (
-            <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginTop: "10px" }}>
-              Analyzed on {new Date(createdAt).toLocaleString()}
-            </p>
-          )}
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <Link
+                to="/history"
+                style={{ fontSize: "13px", color: "var(--text-tertiary)", textDecoration: "none" }}
+              >
+                ← Back to history
+              </Link>
+              {createdAt && (
+                <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginTop: "10px" }}>
+                  Analyzed on {new Date(createdAt).toLocaleString()}
+                </p>
+              )}
+            </div>
+
+            <Link
+              to={`/passport/${id}`}
+              style={{
+                fontSize: "13px",
+                fontWeight: 600,
+                padding: "9px 18px",
+                borderRadius: "10px",
+                background: "rgba(99, 102, 241, 0.08)",
+                border: "1px solid rgba(99, 102, 241, 0.15)",
+                color: "var(--text-accent)",
+                textDecoration: "none",
+              }}
+            >
+              Generate Passport →
+            </Link>
+          </div>
         </div>
 
         {loading ? (

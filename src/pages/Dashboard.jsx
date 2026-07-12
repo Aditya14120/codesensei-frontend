@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 
@@ -7,7 +8,8 @@ import { detectLanguage } from "../utils/detectLanguage";
 
 import Navbar from "../components/layout/Navbar";
 import SubtleGrid from "../components/effects/BackgroundEffects";
-import CodeEditor, { LANGUAGES } from "../components/editor/CodeEditor";
+import CodeEditor from "../components/editor/CodeEditor";
+import { LANGUAGES } from "../constants/languages";
 import AnalysisDashboard from "../components/analysis/AnalysisDashboard";
 import AnalysisLoader from "../components/effects/AnalysisLoader";
 
@@ -42,8 +44,14 @@ int main() {
 };
 
 function Dashboard({ user, onLogout }) {
-  const [language, setLanguage] = useState("java");
-  const [code, setCode] = useState(DEFAULT_SNIPPETS.java);
+  // TranslatePage hands off a translated snippet via navigate("/dashboard", { state }) —
+  // prefill from it once, then behave like a normal Dashboard visit.
+  const location = useLocation();
+  const handoff = location.state;
+
+  const [language, setLanguage] = useState(handoff?.language || "java");
+  const [code, setCode] = useState(handoff?.code || DEFAULT_SNIPPETS[handoff?.language] || DEFAULT_SNIPPETS.java);
+  const [mode, setMode] = useState("professional");
 
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -78,7 +86,7 @@ function Dashboard({ user, onLogout }) {
       setLoading(true);
       setResult(null);
 
-      const response = await API.post("/code/analyze", { code, language });
+      const response = await API.post("/code/analyze", { code, language, mode });
 
       setResult(response.data);
       toast.success("Analysis complete");
@@ -126,6 +134,8 @@ function Dashboard({ user, onLogout }) {
         onLogout={onLogout}
         routeLinks={[
           { label: "Editor", to: "/dashboard" },
+          { label: "Translate", to: "/translate" },
+          { label: "Skills", to: "/skills" },
           { label: "History", to: "/history" },
         ]}
       />
@@ -151,8 +161,51 @@ function Dashboard({ user, onLogout }) {
           setLanguage={handleLanguageChange}
         />
 
+        {/* Review style toggle */}
+        <div className="flex justify-center pt-8 px-6">
+          <div
+            style={{
+              display: "inline-flex",
+              gap: "4px",
+              padding: "4px",
+              borderRadius: "10px",
+              background: "rgba(255, 255, 255, 0.03)",
+              border: "1px solid rgba(255, 255, 255, 0.06)",
+            }}
+          >
+            {[
+              { id: "professional", label: "Professional" },
+              { id: "roast", label: "Roast 🔥" },
+            ].map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => setMode(option.id)}
+                title={
+                  option.id === "roast"
+                    ? "Same analysis, delivered as a sarcastic (but accurate) roast."
+                    : "Straightforward, professional review."
+                }
+                style={{
+                  padding: "8px 18px",
+                  borderRadius: "7px",
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  border: "none",
+                  cursor: "pointer",
+                  background: mode === option.id ? "rgba(255, 255, 255, 0.08)" : "transparent",
+                  color: mode === option.id ? "var(--text-primary)" : "var(--text-tertiary)",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Analyze Button */}
-        <div className="flex justify-center py-12 px-6">
+        <div className="flex justify-center pt-6 pb-12 px-6">
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}

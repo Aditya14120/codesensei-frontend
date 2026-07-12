@@ -3,6 +3,7 @@ import ScoreCard from "./ScoreCard";
 import SummaryCard from "./SummaryCard";
 import ImprovementsCard from "./ImprovementsCard";
 import IssuesCard from "./IssuesCard";
+import ComplexityHeatmap from "./ComplexityHeatmap";
 import ImprovedCodeViewer from "./ImprovedCodeViewer";
 import LearningTipsCard from "./LearningTipsCard";
 
@@ -20,17 +21,29 @@ function AnalysisDashboard({ result }) {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <h2
-            className="text-2xl font-bold tracking-tight mb-2"
-            style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}
-          >
-            Analysis Results
-          </h2>
+          <div className="flex items-center gap-3 mb-2">
+            <h2
+              className="text-2xl font-bold tracking-tight"
+              style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}
+            >
+              Analysis Results
+            </h2>
+            {result.mode === "ROAST" && (
+              <span
+                className="text-xs px-2.5 py-1 rounded-md font-medium"
+                style={{ background: "rgba(245, 158, 11, 0.1)", color: "#f59e0b" }}
+              >
+                Roast Mode 🔥
+              </span>
+            )}
+          </div>
           <p
             className="text-sm"
             style={{ color: "var(--text-secondary)" }}
           >
-            AI-powered analysis complete. Here is your detailed report.
+            {result.mode === "ROAST"
+              ? "The AI didn't hold back. Still technically accurate, we promise."
+              : "AI-powered analysis complete. Here is your detailed report."}
           </p>
         </motion.div>
 
@@ -59,14 +72,21 @@ function AnalysisDashboard({ result }) {
             securityIssues={result.securityIssues}
           />
 
-          {/* Row 3: Improved Code */}
+          {/* Row 3: Complexity Heatmap (over the original code) */}
+          <ComplexityHeatmap
+            code={result.originalCode}
+            language={result.language}
+            heatmap={result.complexityHeatmap}
+          />
+
+          {/* Row 4: Improved Code */}
           <ImprovedCodeViewer
             originalCode={result.originalCode}
             code={result.improvedCode}
             language={result.language}
           />
 
-          {/* Row 4: Learning Tips */}
+          {/* Row 5: Learning Tips */}
           <LearningTipsCard tips={result.learningTips} />
 
         </div>

@@ -149,6 +149,19 @@ body {
   border: 1px solid var(--border-subtle);
 }
 
+/* ---- COMPLEXITY HEATMAP (Monaco full-line decorations) ---- */
+.heatmap-line-low {
+  background: rgba(52, 211, 153, 0.05);
+}
+
+.heatmap-line-medium {
+  background: rgba(250, 204, 21, 0.09);
+}
+
+.heatmap-line-high {
+  background: rgba(248, 113, 113, 0.12);
+}
+
 /* ---- GRADIENT TEXT ---- */
 
 .text-gradient {
